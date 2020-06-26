@@ -1,0 +1,56 @@
+#!/bin/bash
+#
+# Title:         BunnyMapper for Bash Bunny
+# Author:        nathanbuckley -- Cred: Hak5Darren
+# Version:       0.1
+#
+# Target info gather including ... and nmap Scan
+# Saves logs to mass storage loot folder 'mapper'
+#
+# Red ...........Setup
+# Red Blinking...Setup Failed. Target did not obtain IP address. Exit.
+# Amber..........Scanning
+# White..........Switching to Mass Storage (optional)
+# Green..........Finished
+#
+
+#OPTIONS
+NMAP_OPTIONS="-vv -A -sO -sV --reason --fuzzy"
+LOOTDIR=/root/udisk/loot/mapper
+
+
+
+######## INITIALIZATION ########
+LED SETUP
+ATTACKMODE AUTO_ETHERNET
+GET TARGET_IP
+GET TARGET_HOSTNAME
+
+######## MAKE LOOT DIRECTORY ########
+
+# Setup directory if does not exist and setup name for log file
+
+mkdir -p $LOOTDIR
+HOST=${TARGET_HOSTNAME}
+# If  no hostname available set to "nameless"
+[[ -z "$HOST" ]] && HOST="nameless"
+COUNT=$(ls -lad $LOOTDIR/$HOST*.log | wc -l)
+COUNT=$((COUNT+1))
+
+######## ERROR LED IF NO TARGET IP ########
+
+if [ -z "${TARGET_IP}" ]; then
+    LED FAIL
+	exit 1
+fi
+
+######## ATTACK ########
+LED ATTACK
+nmap $NMAP_OPTIONS $TARGET_IP >> $LOOTDIR/$HOST-$COUNT.log
+
+######## CLEANUP ########
+LED CLEANUP
+sync
+
+######## FINISH ########
+LED FINISH

